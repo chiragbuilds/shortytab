@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "ShortyTab",
+  "version": "1.0",
+  "description": "Quickly access your favorite sites with keyboard shortcuts",
+  "icons": {
+    "16": "./icons/icon16.png",
+    "48": "./icons/icon48.png",
+    "148": "./icons/icon148.png"
+  },
+  "background": {
+    "service_worker": "js/background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["js/content.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "permissions": ["tabs"],
+  "web_accessible_resources": [
+    {
+      "resources": ["css/overlay.css"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
