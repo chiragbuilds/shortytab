@@ -16,109 +16,90 @@ function createOverlay() {
   overlay = document.createElement('div');
   overlay.id = 'shortytab-overlay';
   
-  // Apply all styles directly
-  overlay.style.position = 'fixed';
-  overlay.style.top = '0';
-  overlay.style.left = '0';
-  overlay.style.width = '100%';
-  overlay.style.height = '100%';
-  overlay.style.display = 'flex';
-  overlay.style.alignItems = 'center';
-  overlay.style.justifyContent = 'center';
-  overlay.style.zIndex = '2147483647';
-  overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.85)';
-  overlay.style.backdropFilter = 'blur(8px)';
-  overlay.style.pointerEvents = 'none';
-  overlay.style.fontFamily = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+  const container = document.createElement('div');
+  container.className = 'shortcuts-container';
   
-  const box = document.createElement('div');
-  box.style.background = 'rgba(30, 30, 46, 0.95)';
-  box.style.borderRadius = '16px';
-  box.style.padding = '30px';
-  box.style.boxShadow = '0 20px 40px rgba(0,0,0,0.5)';
-  box.style.minWidth = '300px';
-  box.style.textAlign = 'center';
-  box.style.pointerEvents = 'auto';
-  box.style.border = '1px solid rgba(67, 97, 238, 0.3)';
+  // Create all shortcut items
+  shortcuts.forEach((shortcut, index) => {
+    const item = document.createElement('div');
+    item.className = 'shortcut-item';
+    if (index === currentIndex) {
+      item.classList.add('highlighted');
+    }
+    
+    item.innerHTML = `
+      <div class="shortcut-name">${shortcut.name}</div>
+      <div class="shortcut-hint">Press Y to select</div>
+    `;
+    
+    // Add click handler
+    item.addEventListener('click', () => {
+      chrome.runtime.sendMessage({
+        action: "openShortcut",
+        url: shortcut.url
+      });
+      removeOverlay();
+    });
+    
+    container.appendChild(item);
+  });
   
-  box.innerHTML = `
-    <div style="
-      font-size: 2.2rem; 
-      font-weight: 700; 
-      margin-bottom: 20px; 
-      color: #f8f9fa;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
-      transition: all 0.3s ease;
-    " id="shortcut-name">${shortcuts[currentIndex].name}</div>
-    <div style="
-      color: #a0a0c0; 
-      font-size: 1rem; 
-      line-height: 1.6;
-    ">
-      <div style="
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        background: rgba(67, 97, 238, 0.2);
-        padding: 8px 15px;
-        border-radius: 8px;
-        margin: 10px 0;
-        border: 1px solid rgba(67, 97, 238, 0.4);
-      ">
-        <span style="
-          background: #2d2d4e;
-          padding: 5px 12px;
-          border-radius: 6px;
-          font-weight: bold;
-          box-shadow: 0 4px 0 #1a1a2e;
-          color: #f8f9fa;
-        ">${navigator.platform.includes('Mac') ? 'Cmd' : 'Ctrl'}</span> + 
-        <span style="
-          background: #2d2d4e;
-          padding: 5px 12px;
-          border-radius: 6px;
-          font-weight: bold;
-          box-shadow: 0 4px 0 #1a1a2e;
-          color: #f8f9fa;
-        ">Shift</span> + 
-        <span style="
-          background: #2d2d4e;
-          padding: 5px 12px;
-          border-radius: 6px;
-          font-weight: bold;
-          box-shadow: 0 4px 0 #1a1a2e;
-          color: #f8f9fa;
-        ">Y</span> to cycle
-      </div>
-      <p>Release keys to open</p>
-    </div>
+  // Create keyboard hint
+  const hint = document.createElement('div');
+  hint.className = 'keyboard-hint';
+  hint.innerHTML = `
+    <span class="key">${navigator.platform.includes('Mac') ? 'Cmd' : 'Ctrl'}</span> + 
+    <span class="key">Shift</span> + 
+    <span class="key">Y</span> to cycle • Release to open
   `;
   
-  overlay.appendChild(box);
+  overlay.appendChild(container);
+  overlay.appendChild(hint);
   document.body.appendChild(overlay);
   
   // Prevent body scrolling
   document.body.style.overflow = 'hidden';
+  
+  // Auto-scroll to highlighted item
+  scrollToHighlighted();
 }
 
 // Update overlay display
 function updateOverlay() {
   if (!overlay) return;
   
-  const nameElement = overlay.querySelector('#shortcut-name');
-  if (nameElement) {
-    nameElement.textContent = shortcuts[currentIndex].name;
+  const items = overlay.querySelectorAll('.shortcut-item');
+  items.forEach((item, index) => {
+    if (index === currentIndex) {
+      item.classList.add('highlighted');
+    } else {
+      item.classList.remove('highlighted');
+    }
+  });
+  
+  // Auto-scroll to highlighted item
+  scrollToHighlighted();
+}
+
+// Auto-scroll to highlighted item
+function scrollToHighlighted() {
+  const container = overlay.querySelector('.shortcuts-container');
+  const highlighted = overlay.querySelector('.shortcut-item.highlighted');
+  
+  if (container && highlighted) {
+    const containerWidth = container.offsetWidth;
+    const scrollLeft = container.scrollLeft;
+    const itemLeft = highlighted.offsetLeft;
+    const itemWidth = highlighted.offsetWidth;
     
-    // Animation
-    nameElement.style.transition = 'none';
-    nameElement.style.opacity = '0';
-    nameElement.style.transform = 'translateY(20px)';
+    // Calculate the position to scroll to
+    const scrollTo = itemLeft - (containerWidth / 2) + (itemWidth / 2);
     
-    setTimeout(() => {
-      nameElement.style.transition = 'all 0.4s ease';
-      nameElement.style.opacity = '1';
-      nameElement.style.transform = 'translateY(0)';
-    }, 10);
+    // Smooth scroll
+    container.scrollTo({
+      left: scrollTo,
+      behavior: 'smooth'
+    });
   }
 }
 
