@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Horizontal ShortyTab",
+  "name": "ShortyTab",
   "version": "1.0",
   "description": "Quickly access your favorite sites with keyboard shortcuts",
   "icons": {
