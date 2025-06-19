@@ -16,7 +16,37 @@ function createOverlay() {
   if (shortcuts.length === 0) {
     const emptyMessage = document.createElement('div');
     emptyMessage.className = 'empty-message';
-    emptyMessage.textContent = 'No shortcuts configured. Add some in the extension options.';
+    emptyMessage.textContent = 'You can customize shortcuts from the extension options.';
+    shortcuts = [
+      { name: "YouTube", url: "https://youtube.com" },
+      { name: "GitHub", url: "https://github.com" },
+      { name: "OpenAI", url: "https://chat.openai.com" },
+      { name: "Twitter", url: "https://twitter.com" },
+      { name: "Reddit", url: "https://reddit.com" }  
+    ];
+    shortcuts.forEach((shortcut, index) => {
+      const item = document.createElement('div');
+      item.className = 'shortcut-item';
+      if (index === currentIndex) {
+        item.classList.add('highlighted');
+      }
+      
+      item.innerHTML = `
+        <div class="shortcut-name">${shortcut.name}</div>
+        <div class="shortcut-hint">Press Y to select</div>
+      `;
+      
+      // Add click handler
+      item.addEventListener('click', () => {
+        chrome.runtime.sendMessage({
+          action: "openShortcut",
+          url: shortcut.url
+        });
+        removeOverlay();
+      });
+      
+      container.appendChild(item);
+    });
     container.appendChild(emptyMessage);
   } else {
     // Create all shortcut items
