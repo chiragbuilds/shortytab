@@ -1,13 +1,6 @@
 let overlay = null;
 let currentIndex = 0;
-const shortcuts = [
-  { name: "Google", url: "https://www.google.com" },
-  { name: "GitHub", url: "https://github.com" },
-  { name: "YouTube", url: "https://youtube.com" },
-  { name: "OpenAI", url: "https://chat.openai.com" },
-  { name: "Twitter", url: "https://twitter.com" },
-  { name: "Reddit", url: "https://reddit.com" }
-];
+let shortcuts = []; // Will be loaded from storage
 
 // Create the overlay
 function createOverlay() {
@@ -19,30 +12,38 @@ function createOverlay() {
   const container = document.createElement('div');
   container.className = 'shortcuts-container';
   
-  // Create all shortcut items
-  shortcuts.forEach((shortcut, index) => {
-    const item = document.createElement('div');
-    item.className = 'shortcut-item';
-    if (index === currentIndex) {
-      item.classList.add('highlighted');
-    }
-    
-    item.innerHTML = `
-      <div class="shortcut-name">${shortcut.name}</div>
-      <div class="shortcut-hint">Press Y to select</div>
-    `;
-    
-    // Add click handler
-    item.addEventListener('click', () => {
-      chrome.runtime.sendMessage({
-        action: "openShortcut",
-        url: shortcut.url
+  // Check if there are shortcuts
+  if (shortcuts.length === 0) {
+    const emptyMessage = document.createElement('div');
+    emptyMessage.className = 'empty-message';
+    emptyMessage.textContent = 'No shortcuts configured. Add some in the extension options.';
+    container.appendChild(emptyMessage);
+  } else {
+    // Create all shortcut items
+    shortcuts.forEach((shortcut, index) => {
+      const item = document.createElement('div');
+      item.className = 'shortcut-item';
+      if (index === currentIndex) {
+        item.classList.add('highlighted');
+      }
+      
+      item.innerHTML = `
+        <div class="shortcut-name">${shortcut.name}</div>
+        <div class="shortcut-hint">Press Y to select</div>
+      `;
+      
+      // Add click handler
+      item.addEventListener('click', () => {
+        chrome.runtime.sendMessage({
+          action: "openShortcut",
+          url: shortcut.url
+        });
+        removeOverlay();
       });
-      removeOverlay();
+      
+      container.appendChild(item);
     });
-    
-    container.appendChild(item);
-  });
+  }
   
   // Create keyboard hint
   const hint = document.createElement('div');
@@ -63,8 +64,6 @@ function createOverlay() {
   // Auto-scroll to highlighted item
   scrollToHighlighted();
 }
-
-// Update overlay display
 function updateOverlay() {
   if (!overlay) return;
   
@@ -80,8 +79,6 @@ function updateOverlay() {
   // Auto-scroll to highlighted item
   scrollToHighlighted();
 }
-
-// Auto-scroll to highlighted item
 function scrollToHighlighted() {
   const container = overlay.querySelector('.shortcuts-container');
   const highlighted = overlay.querySelector('.shortcut-item.highlighted');
@@ -103,7 +100,12 @@ function scrollToHighlighted() {
   }
 }
 
-// Remove overlay
+// Load shortcuts from storage
+function loadShortcuts() {
+  chrome.storage.local.get(['shortcuts'], (result) => {
+    shortcuts = result.shortcuts || [];
+  });
+}
 function removeOverlay() {
   if (overlay && overlay.parentNode) {
     overlay.parentNode.removeChild(overlay);
@@ -112,11 +114,21 @@ function removeOverlay() {
     currentIndex = 0;
   }
 }
-
-// Use event capturing to bypass site event blockers
-document.addEventListener('keydown', handleKeyDown, true);
-document.addEventListener('keyup', handleKeyUp, true);
-
+// Initialize the content script
+function initContentScript() {
+  loadShortcuts();
+  
+  // Listen for storage changes
+  chrome.storage.onChanged.addListener((changes) => {
+    if (changes.shortcuts) {
+      shortcuts = changes.shortcuts.newValue || [];
+    }
+  });
+  
+  // Use event capturing to bypass site event blockers
+  document.addEventListener('keydown', handleKeyDown, true);
+  document.addEventListener('keyup', handleKeyUp, true);
+}
 function handleKeyDown(e) {
   // Check for Ctrl/Cmd + Shift + Y
   const isTrigger = (e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'y';
@@ -156,3 +168,7 @@ function handleKeyUp(e) {
     }
   }
 }
+// [Rest of the functions remain the same: updateOverlay, scrollToHighlighted, removeOverlay, handleKeyDown, handleKeyUp]
+
+// Initialize the content script
+initContentScript();

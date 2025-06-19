@@ -8,6 +8,9 @@
     "48": "icons/icon48.png",
     "148": "icons/icon148.png"
   },
+  "action": {
+    "default_popup": "popup.html"
+  },
   "background": {
     "service_worker": "js/background.js"
   },
@@ -19,5 +22,10 @@
       "run_at": "document_end"
     }
   ],
-  "permissions": ["tabs"]
+  "permissions": [
+    "tabs",
+    "storage",
+    "activeTab",
+    "scripting"
+  ]
 }

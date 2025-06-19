@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>QuickNav Settings</title>
+  <link rel="stylesheet" href="./css/popup.css">
+</head>
+<body>
+  <div class="container">
+    <h1>QuickNav Shortcuts</h1>
+    
+    <!-- Shortcut Form -->
+    <form id="shortcut-form">
+      <input type="text" id="name-input" placeholder="Shortcut Name" required>
+      <input type="url" id="url-input" placeholder="https://example.com" required>
+      <button type="submit" id="save-btn">Add Shortcut</button>
+      <button type="button" id="cancel-edit" style="display:none">Cancel Edit</button>
+    </form>
+
+    <!-- Shortcut List -->
+    <ul id="shortcut-list"></ul>
+
+    <!-- Instructions -->
+    <div class="instructions">
+      <h2>How to Use:</h2>
+      <ol>
+        <li>Press and hold <kbd>Ctrl</kbd> + <kbd>Shift</kbd></li>
+        <li>Press <kbd>Y</kbd> to open shortcut menu</li>
+        <li>While holding <kbd>Ctrl</kbd> + <kbd>Shift</kbd>, press <kbd>Y</kbd> repeatedly to navigate</li>
+        <li>Release <kbd>Ctrl</kbd> + <kbd>Shift</kbd> to open selected site</li>
+      </ol>
+    </div>
+  </div>
+
+  <script src="./js/popup.js"></script>
+</body>
+</html>
