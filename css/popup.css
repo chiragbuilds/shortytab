@@ -1,9 +1,12 @@
 body {
   width: 400px;
   padding: 15px;
-  font-family: Arial, sans-serif;
-  background-color: #f5f5f5;
-  color: #333;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: rgba(30, 30, 46, 0.95);
+  backdrop-filter: blur(8px);
+  color: #f8f9fa;
+  margin: 0;
+  min-height: 500px;
 }
 
 .container {
@@ -11,9 +14,13 @@ body {
 }
 
 h1 {
-  font-size: 1.5em;
-  margin-bottom: 20px;
-  color: #202124;
+  font-size: 1.8rem;
+  margin-bottom: 30px;
+  color: #f8f9fa;
+  text-align: center;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  padding-bottom: 15px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
 }
 
 #shortcut-form {
@@ -26,45 +33,91 @@ h1 {
 #shortcut-form input {
   flex: 1;
   min-width: 120px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  padding: 12px 15px;
+  background: rgba(30, 30, 46, 0.7);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #f8f9fa;
+  font-size: 1rem;
+}
+
+#shortcut-form input::placeholder {
+  color: #a0a0c0;
+}
+
+#shortcut-form input:focus {
+  outline: none;
+  border-color: rgba(67, 97, 238, 0.5);
 }
 
 #shortcut-form button {
-  padding: 10px 15px;
-  background-color: #1a73e8;
+  padding: 12px 20px;
+  background: rgba(67, 97, 238, 0.7);
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 10px;
   cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 0 #1a1a2e;
 }
 
 #shortcut-form button:hover {
-  background-color: #0d62cb;
+  background: rgba(67, 97, 238, 1);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 #1a1a2e;
 }
 
 #cancel-edit {
-  background-color: #5f6368;
+  background: rgba(95, 99, 104, 0.7);
 }
 
 #shortcut-list {
   list-style: none;
-  padding: 0;
+  padding: 15px;
   margin: 0;
   max-height: 300px;
   overflow-y: auto;
+  background: rgba(30, 30, 46, 0.4);
+  border-radius: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Scrollbar styling */
+#shortcut-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+#shortcut-list::-webkit-scrollbar-track {
+  background: rgba(30, 30, 46, 0.3);
+  border-radius: 4px;
+}
+
+#shortcut-list::-webkit-scrollbar-thumb {
+  background: rgba(67, 97, 238, 0.5);
+  border-radius: 4px;
+}
+
+#shortcut-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(67, 97, 238, 0.8);
 }
 
 #shortcut-list li {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
-  background: white;
-  border: 1px solid #e8eaed;
-  border-radius: 4px;
-  margin-bottom: 8px;
+  padding: 15px;
+  background: rgba(30, 30, 46, 0.7);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  margin-bottom: 15px;
+  transition: all 0.3s ease;
+}
+
+#shortcut-list li:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  border-color: rgba(67, 97, 238, 0.3);
 }
 
 #shortcut-list .shortcut-info {
@@ -77,11 +130,13 @@ h1 {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-size: 1.1rem;
+  color: #f8f9fa;
 }
 
 #shortcut-list .shortcut-url {
   font-size: 0.8em;
-  color: #5f6368;
+  color: #a0a0c0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -89,30 +144,37 @@ h1 {
 
 #shortcut-list .actions {
   display: flex;
-  gap: 5px;
+  gap: 8px;
 }
 
 #shortcut-list button {
-  background: none;
+  background: rgba(67, 97, 238, 0.3);
   border: none;
-  padding: 5px;
+  padding: 8px 12px;
   cursor: pointer;
-  color: #5f6368;
+  color: #f8f9fa;
+  border-radius: 8px;
+  transition: all 0.3s ease;
 }
 
 #shortcut-list button:hover {
-  color: #1a73e8;
+  background: rgba(67, 97, 238, 0.7);
+  transform: scale(1.1);
 }
 
 .instructions {
   margin-top: 25px;
-  padding-top: 15px;
-  border-top: 1px solid #e8eaed;
+  padding: 20px;
+  border-top: 2px solid rgba(255, 255, 255, 0.1);
+  background: rgba(30, 30, 46, 0.7);
+  border-radius: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
 }
 
 .instructions h2 {
-  font-size: 1.2em;
-  margin-bottom: 10px;
+  font-size: 1.4rem;
+  margin-bottom: 15px;
+  color: #f8f9fa;
 }
 
 .instructions ol {
@@ -120,13 +182,18 @@ h1 {
 }
 
 .instructions li {
-  margin-bottom: 8px;
+  margin-bottom: 12px;
+  color: #a0a0c0;
+  line-height: 1.5;
 }
 
 kbd {
-  background-color: #f1f3f4;
-  border: 1px solid #dadce0;
-  border-radius: 4px;
-  padding: 2px 6px;
-  font-size: 0.9em;
+  background: #2d2d4e;
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-weight: bold;
+  box-shadow: 0 4px 0 #1a1a2e;
+  color: #f8f9fa;
+  display: inline-block;
+  margin: 0 3px;
 }
