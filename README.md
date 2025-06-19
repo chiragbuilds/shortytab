@@ -6,9 +6,15 @@
 
 ## 🚀 Features
 
-- Switch between tabs using keyboard shortcuts  
-- Clean and minimal UI overlay  
-- Fast and responsive 
+- ⌨️ Keyboard-based tab switching (Ctrl/Cmd + Shift + Y)
+- 💡 Overlay UI with a clean, minimal look
+- ⚡ Fast performance, no tracking, 100% local 
+
+---
+
+## 🌐 Official Landing Page
+
+👉 Visit the [Official website](https://chiragbuilds.github.io/shortytab-site) for more info.
 
 ---
 
@@ -24,18 +30,11 @@ No frameworks or external dependencies!
 
 ## 🔧 Installation (Load as Unpacked Extension)
 
-1. Star ⭐ and fork 🍴 this repo (optional but appreciated!)
-2. Clone the repository:
-   ```bash
-   git clone https://github.com/chiragbuilds/shortytab.git
-   ```
+1. Star ⭐ this repo (optional but appreciated!)
+2. Download from releases or from the [website](https://chiragbuilds.github.io/shortytab-site)
+   and unzip it.
 3. Open Chrome and go to: ```chrome://extensions/```
 4. Enable Developer mode (toggle on top-right).
 5. Click Load unpacked (top-left corner).
 6. Select the cloned **shortytab** folder.
 6. You're done! The extension is now active.
-
----
-
-## Screenshots and guide
-    **COMING SOON**
